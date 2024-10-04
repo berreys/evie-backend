@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { addUser } from '../db'
-import { User } from '../types'
+import { addUser } from '../db';
+import { User } from '../types';
 
 const router: Router = Router();
 
