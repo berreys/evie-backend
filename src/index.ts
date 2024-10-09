@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 import { Request, Response } from 'express';
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Dynamically load each route in ./routes
 const loadRoutes = (app: express.Application) => {
