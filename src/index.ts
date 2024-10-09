@@ -35,6 +35,8 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Evie\nConnecting EV drivers to thousands of chargers around the country.');
 });
 
+app.options('*', cors());
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
