@@ -13,6 +13,7 @@ const client: MongoClient = new MongoClient(url);
 
 // Adds user to database
 export async function addUser(user: User): Promise<string | null> {
+    console.log(url);
     try {
         await client.connect();
         const database = client.db('users');
