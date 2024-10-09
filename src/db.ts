@@ -1,7 +1,14 @@
 import { InsertOneResult, WithId, MongoClient, ObjectId } from "mongodb";
 import { User } from './types'
 // const config = require('../dbconfig.json');
-const url: string = `mongodb+srv://${process.env.username}:${process.env.password}@${process.env.hostname}`;
+
+const config = {
+    username: process.env.db_username,
+    password: process.env.db_password,
+    hostname: process.env.db_hostname
+}
+
+const url: string = `mongodb+srv://${config.username}:${config.password}@${config.hostname}`;
 const client: MongoClient = new MongoClient(url);
 
 // Adds user to database

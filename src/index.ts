@@ -7,6 +7,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 import { Request, Response } from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 const port = process.env.PORT || 3000;
 
 // Dynamically load each route in ./routes
