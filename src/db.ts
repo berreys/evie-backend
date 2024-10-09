@@ -16,9 +16,11 @@ export async function addUser(user: User): Promise<string | null> {
     console.log(url);
     try {
         await client.connect();
+        console.log("connected")
         const database = client.db('users');
         const collection = database.collection('users');
         const result: InsertOneResult = await collection.insertOne(user);
+        console.log("added")
         return result.insertedId.toString();
     }
     catch (error) {
