@@ -5,7 +5,9 @@ import cors from 'cors';
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://127.0.0.1:5500'
+}));
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -34,8 +36,6 @@ loadRoutes(app);
 app.get('/', (req: Request, res: Response) => {
     res.send('Evie\nConnecting EV drivers to thousands of chargers around the country.');
 });
-
-app.options('*', cors());
 
 // Start the server
 app.listen(port, () => {
