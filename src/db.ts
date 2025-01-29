@@ -1,6 +1,5 @@
-import { InsertOneResult, WithId, MongoClient, ObjectId } from "mongodb";
 import { User } from './types';
-import sql from 'mysql2';
+import sql, { QueryOptions } from 'mysql2';
 
 const config = {
     user: process.env.db_username,
@@ -9,19 +8,18 @@ const config = {
     host: process.env.db_server
 };
 
-// Adds user to database
-export async function addUser(user: User) {
-    let pool = null;
+async function executeQuery(query: QueryOptions) {
+    let connection = null;
     try {
-        pool = await sql.createConnection(config);
-        pool.connect((err) => {
+        connection = await sql.createConnection(config);
+        connection.connect((err) => {
             if(err){
                 console.error('Error connecting to database:', err.message);
                 return;
             }
             console.log('Connected to database.');
-        });
-        pool.query('SELECT * FROM test;', (err, results) => {
+        })
+        connection.query(query, (err, results) => {
             if(err){
                 console.error('Error executing query:', err.message);
                 return;
@@ -33,11 +31,16 @@ export async function addUser(user: User) {
         console.error('Error adding user:', error);
     }
     finally {
-        if(pool){
-            await pool.end();
+        if(connection){
+            await connection.end();
             console.log('Database connection closed.');
         }
     }
+}
+
+// Adds user to database
+export async function addUser(user: User) {
+    await executeQuery({'sql': 'SELECT * FROM test;'});
 }
 
 // Gets user from database
