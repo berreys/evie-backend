@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS VehicleOwner_Vehicle;
 DROP TABLE IF EXISTS VehicleOwner;
 DROP TABLE IF EXISTS ChargerOwner;
 DROP TABLE IF EXISTS Account;
+DROP TABLE IF EXISTS Reservation;
 DROP TABLE IF EXISTS Vehicle;
 DROP TABLE IF EXISTS ChargerAvailability;
 DROP TABLE IF EXISTS Charger;
@@ -59,7 +60,7 @@ CREATE TABLE Address(
 CREATE TABLE Charger(
     id INT AUTO_INCREMENT PRIMARY KEY,
     addressId INT,
-    FOREIGN KEY (addressId) REFERENCES Address(id)
+    FOREIGN KEY (addressId) REFERENCES Address(id) ON DELETE CASCADE
 );
 
 CREATE TABLE ChargerAvailability(
@@ -67,4 +68,14 @@ CREATE TABLE ChargerAvailability(
     chargerId INT NOT NULL,
     startDateTime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     endDateTime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Reservation(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    startDateTime DATETIME NOT NULL,
+    endDateTime DATETIME NOT NULL,
+    vehicleId INT NOT NULL,
+    chargerId INT NOT NULL,
+    FOREIGN KEY (vehicleId) REFERENCES Vehicle(id) ON DELETE CASCADE,
+    FOREIGN KEY (chargerId) REFERENCES Charger(id) ON DELETE CASCADE
 );
