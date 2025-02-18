@@ -22,7 +22,16 @@ git clone https://github.com/berreys/evie-backend.git
 npm install
 ```
 
-To run with live updating: npm run dev
-To run without live updating: npm start
-To build into JS code: npm run build
-To run with compiled JS code: npm run serve
+## Running Locally
+
+To run with live updating: ```npm run dev```
+
+To run without live updating: ```npm start```
+
+To build into JS code: ```npm run build```
+
+To run with compiled JS code: ```npm run serve```
+
+## Deploying
+
+There is no deployed environment yet for this project.
