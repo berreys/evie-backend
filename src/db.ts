@@ -1,5 +1,5 @@
 import { User } from './types';
-import sql, { QueryOptions, QueryResult } from 'mysql2';
+import sql, { QueryOptions, QueryResult, ResultSetHeader } from 'mysql2';
 
 const config = {
     user: process.env.db_username,
@@ -43,7 +43,33 @@ async function executeQuery(query: QueryOptions) : Promise<QueryResult | null> {
 
 // Adds user to database
 export async function addUser(user: User) {
-    let res : QueryResult | null = await executeQuery({'sql': 'SELECT * FROM test;'});
+    let connection = null;
+    let res = null;
+    try {
+        connection = await sql.createConnection(config);
+        console.log('Connected to database.');
+
+        let query = 'INSERT INTO account (firstName, lastName, username, passwordHashed, email, createdAt) VALUES (?, ?, ?, ?, ?, NOW());';
+        let values = [user.firstName, user.lastName, user.username, user.password, user.email]
+        const insertRes: any = await connection.execute(query, values);
+
+        query = 'SELECT * FROM account WHERE id = ?;';
+        values = [insertRes.insertId]
+        const rows: any = await connection.execute(query, values);
+
+        res = rows[0];
+
+    }
+    catch (error) {
+        console.error('Error adding user:', error);
+    }
+    finally {
+        if(connection){
+            await connection.end();
+            console.log('Database connection closed.');
+        }
+        return res;
+    }
 }
 
 // Gets user from database
