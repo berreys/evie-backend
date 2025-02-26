@@ -61,11 +61,31 @@ export async function login(credentials: UserLogin) {
 }
 
 export async function addCharger() {
-    // TODO: add a charger to the database. Ensure it is properly associated with the user. Params to this function also need to be defined.
+    // TODO: add a charger to the database. Ensure it is properly associated with the user.
+    // Params to this function also need to be defined.
     return null;
 }
 
 export async function getChargers() {
-    // TODO: get all the chargers from the database and return them in a list. Params to this function also need to be defined.
+    // TODO: get all the available chargers from the database and return them in a list.
+    // Params to this function also need to be defined.
+    return null;
+}
+
+export async function addAvailability() {
+    // TODO: add a time slot for a charger during which it can be rented
+    // Params to this function also need to be defined.
+    return null;
+}
+
+export async function addReservation() {
+    // TODO: add a reservation for a charger and user
+    // Params to this function also need to be defined.
+    return null;
+}
+
+export async function addCar() {
+    // TODO: add a vehicle for a user into the DB
+    // Params to this function also need to be defined.
     return null;
 }
