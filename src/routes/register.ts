@@ -8,15 +8,16 @@ const router: Router = Router();
 router.post('/', async (req: Request, res: Response) => {
     try {
         const userData: User = req.body;
-        await addUser(userData);
-        res.status(201).send({
-            "message" : "database connected successfully!"
-        })
+        const response = await addUser(userData);
+        if(!response.error){
+            res.status(201).send(response)
+        }
+        else{
+            throw response.error;
+        }
     } catch (error) {
-        console.error('Error adding user:', error);
-        res.status(500).send({
-            "message" : "An error occurred registering user",
-            "id" : null
+        res.status(400).send({
+            "message" : "An error occurred registering user"
         });
     }
 });

@@ -39,6 +39,7 @@ export async function addUser(user: User) {
     }
     catch (error) {
         console.error('Error adding user:', error);
+        return {error: error};
     }
     finally {
         if(connection){
