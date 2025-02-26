@@ -4,7 +4,6 @@ import { User } from '../types';
 
 const router: Router = Router();
 
-// Define the register route using POST
 router.post('/', async (req: Request, res: Response) => {
     try {
         const userData: User = req.body;

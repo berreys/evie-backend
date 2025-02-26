@@ -7,3 +7,8 @@ export interface User {
     chargerOwner: boolean;
     vehicleOwner: boolean;
 }
+
+export interface UserLogin {
+    username: String;
+    password: String;
+}

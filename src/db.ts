@@ -1,4 +1,4 @@
-import { User } from './types';
+import { User, UserLogin } from './types';
 import sql, { QueryOptions, QueryResult, ResultSetHeader } from 'mysql2/promise';
 
 const config = {
@@ -55,22 +55,17 @@ export async function addUser(user: User) {
     }
 }
 
-// Gets user from database
-export async function getUser(username: string): Promise<User | null> {
-    // try {
-    //     await client.connect();
-    //     const database = client.db('users');
-    //     const collection = database.collection('users');
-    //     const result = await collection.findOne({username: username});
-    //     console.log(result);
-    //     return null;
-    // }
-    // catch (error) {
-    //     console.error("Error retrieving user:', error");
-    //     return null;
-    // }
-    // finally {
-    //     await client.close();
-    // }
-    return null
+export async function login(credentials: UserLogin) {
+    // TODO: check that username and password match. Return true if credentials are valid, else return false
+    return null;
+}
+
+export async function addCharger() {
+    // TODO: add a charger to the database. Ensure it is properly associated with the user. Params to this function also need to be defined.
+    return null;
+}
+
+export async function getChargers() {
+    // TODO: get all the chargers from the database and return them in a list. Params to this function also need to be defined.
+    return null;
 }
