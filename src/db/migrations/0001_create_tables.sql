@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS VehicleOwner_Vehicle;
+DROP TABLE IF EXISTS ChargerOwner_Charger;
 DROP TABLE IF EXISTS VehicleOwner;
 DROP TABLE IF EXISTS ChargerOwner;
 DROP TABLE IF EXISTS Account;
@@ -61,6 +62,14 @@ CREATE TABLE Charger(
     id INT AUTO_INCREMENT PRIMARY KEY,
     addressId INT,
     FOREIGN KEY (addressId) REFERENCES Address(id) ON DELETE CASCADE
+);
+
+CREATE TABLE ChargerOwner_Charger(
+    chargerOwnerId INT,
+    chargerId INT,
+    PRIMARY KEY (chargerOwnerId, chargerId),
+    FOREIGN KEY (chargerOwnerId) REFERENCES ChargerOwner(id) ON DELETE CASCADE,
+    FOREIGN KEY (chargerId) REFERENCES Charger(id) ON DELETE CASCADE
 );
 
 CREATE TABLE ChargerAvailability(

@@ -29,6 +29,21 @@ export async function addUser(user: User) {
         if(user.chargerOwner){
             query = 'INSERT INTO chargerowner (accountId) VALUES (?);';
             values = [insertRes[0].insertId];
+            const chargerOwnerInsertRes: any = await connection.execute(query, values);
+            query = 'INSERT INTO address (zip, state, city, addressLine1, addressLine2) VALUES (?, ?, ?, ?, ?);';
+            values = [
+                user.zip ? user.zip : "", 
+                user.state ? user.state : "",
+                user.city ? user.city : "",
+                user.addrLine1 ? user.addrLine1 : "",
+                user.addrLine2 ? user.addrLine2 : ""
+            ];
+            const addressInsertRes: any = await connection.execute(query, values);
+            query = 'INSERT INTO charger (addressId) VALUES (?);';
+            values = [addressInsertRes[0].insertId];
+            const chargerInsertRes: any = await connection.execute(query, values);
+            query = 'INSERT INTO chargerowner_charger (chargerownerid, chargerid) VALUES (?, ?);';
+            values = [chargerOwnerInsertRes[0].insertId, chargerInsertRes[0].insertId];
             await connection.execute(query, values);
         }
 
