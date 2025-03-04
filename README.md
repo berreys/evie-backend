@@ -24,6 +24,18 @@ npm install
 
 ## Running Locally
 
+Install and set up a database with MySQL workbench. 
+
+Create a file in the root directory called ```.env```. Add the following contents, using your credentials from MySQL workbench:
+
+```
+db_username: root
+db_password: password123
+db_name: evie
+db_server: localhost
+
+```
+
 To run with live updating: ```npm run dev```
 
 To run without live updating: ```npm start```
