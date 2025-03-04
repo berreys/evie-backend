@@ -5,9 +5,21 @@ import { UserLogin } from '../types';
 const router: Router = Router();
 
 router.get('/', async (req: Request, res: Response) => {
-    // TODO: use the getChargers function from the DB file to retrieve a list of all available chargers. 
-    // (Don't worry about pagination or getting a specific number of them for now)
-    res.status(201).send({});
+    try {
+        const response: any = await getChargers();
+        if(!response.error){
+            res.status(201).send(response);
+        }
+        else{
+            throw response.error;
+        }
+    }
+    catch (error) {
+        res.status(400).send({
+            "message": "An error occurred getting charger data."
+        });
+    }
+    
 });
 
 export default router;

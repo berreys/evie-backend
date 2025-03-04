@@ -14,7 +14,8 @@ router.post('/', async (req: Request, res: Response) => {
         else{
             throw response.error;
         }
-    } catch (error) {
+    }
+    catch (error) {
         res.status(400).send({
             "message" : "An error occurred registering user"
         });

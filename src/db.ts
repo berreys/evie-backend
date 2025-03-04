@@ -87,16 +87,28 @@ export async function login(credentials: UserLogin) {
     return null;
 }
 
-export async function addCharger() {
-    // TODO: add a charger to the database. Ensure it is properly associated with the user.
-    // Params to this function also need to be defined.
-    return null;
-}
 
 export async function getChargers() {
-    // TODO: get all the available chargers from the database and return them in a list.
-    // Params to this function also need to be defined.
-    return null;
+    let connection = null;
+    let res: any = null;
+    try {
+        connection = await sql.createConnection(config);
+
+        // Insert user into account table
+        let query = 'SELECT * FROM charger c INNER JOIN address a ON c.addressId = a.id;';
+        res = await connection.execute(query);
+    }
+    catch (error) {
+        console.error('Error retrieving chargers:', error);
+        return {error: error};
+    }
+    finally {
+        if(connection){
+            await connection.end();
+            console.log('Database connection closed.');
+        }
+        return res[0];
+    }
 }
 
 export async function addAvailability() {
@@ -107,12 +119,6 @@ export async function addAvailability() {
 
 export async function addReservation() {
     // TODO: add a reservation for a charger and user
-    // Params to this function also need to be defined.
-    return null;
-}
-
-export async function addCar() {
-    // TODO: add a vehicle for a user into the DB
     // Params to this function also need to be defined.
     return null;
 }
