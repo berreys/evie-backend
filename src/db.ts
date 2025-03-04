@@ -51,6 +51,18 @@ export async function addUser(user: User) {
         if(user.vehicleOwner){
             query = 'INSERT INTO vehicleowner (accountId) VALUES (?);';
             values = [insertRes[0].insertId];
+            const vehicleOwnerInsertRes: any = await connection.execute(query, values);
+            query = 'INSERT INTO vehicle (make, model, color, licensePlateNumber, licensePlateState) VALUES (?, ?, ?, ?, ?);';
+            values = [
+                user.make ? user.make : "",
+                user.model ? user.model : "",
+                user.color ? user.color : "",
+                user.plateNumber ? user.plateNumber : "",
+                user.plateState ? user.plateState : ""
+            ];
+            const vehicleInsertRes: any = await connection.execute(query, values);
+            query = 'INSERT INTO vehicleowner_vehicle (vehicleOwnerId, vehicleId) VALUES (?, ?);';
+            values = [vehicleOwnerInsertRes[0].insertId, vehicleInsertRes[0].insertId];
             await connection.execute(query, values);
         }
 
