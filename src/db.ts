@@ -1,4 +1,4 @@
-import { User, UserLogin } from './types';
+import { Availability, User, UserLogin } from './types';
 import sql, { QueryOptions, QueryResult, ResultSetHeader } from 'mysql2/promise';
 
 const config = {
@@ -111,10 +111,29 @@ export async function getChargers() {
     }
 }
 
-export async function addAvailability() {
-    // TODO: add a time slot for a charger during which it can be rented
-    // Params to this function also need to be defined.
-    return null;
+export async function addAvailability(availability: Availability) {
+    let connection = null;
+    let res = null;
+    try {
+        connection = await sql.createConnection(config);
+
+        // Insert user into availability table
+        let query = 'INSERT INTO chargeravailability (chargerId, startDateTime, endDateTime) VALUES (?, ?, ?);';
+        let values = [availability.chargerId, availability.startTime, availability.endTime];
+        const insertRes: any = await connection.execute(query, values);
+        res = insertRes[0].insertId;
+    }
+    catch (error) {
+        console.error('Error adding user:', error);
+        return {error: error};
+    }
+    finally {
+        if(connection){
+            await connection.end();
+            console.log('Database connection closed.');
+        }
+        return res;
+    }
 }
 
 export async function addReservation() {

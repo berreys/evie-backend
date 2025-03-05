@@ -24,3 +24,9 @@ export interface UserLogin {
     username: String;
     password: String;
 }
+
+export interface Availability {
+    chargerId: Number;
+    startTime: String; //ISO format
+    endTime: String; //ISO format
+}

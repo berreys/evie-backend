@@ -1,12 +1,27 @@
 import { Router, Request, Response } from 'express';
 import { addAvailability } from '../db';
-import { UserLogin } from '../types';
+import { Availability } from '../types';
+
 
 const router: Router = Router();
 
 router.post('/', async (req: Request, res: Response) => {
-    // TODO: use addAvailability function in DB file to add an availability time slot for a charger
-    res.status(201).send({});
+    try {
+            const availabilityData: Availability = req.body;
+            const response = await addAvailability(availabilityData);
+            if(!response.error){
+                res.status(201).send({id: response})
+            }
+            else{
+                throw response.error;
+            }
+        }
+        catch (error) {
+            console.log(error);
+            res.status(400).send({
+                "message" : "An error occurred adding availability."
+            });
+        }
 });
 
 export default router;
