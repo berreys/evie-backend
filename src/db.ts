@@ -83,8 +83,52 @@ export async function addUser(user: User) {
 }
 
 export async function login(credentials: UserLogin) {
-    // TODO: check that username and password match. Return true if credentials are valid, else return false
-    return null;
+    console.log(credentials);
+    let connection = null;
+    let res: any = null;
+    try {
+        connection = await sql.createConnection(config);
+
+        // Find the data for the given username
+        let query = 'SELECT * FROM account WHERE username = ?;';
+        let values = [credentials.username];
+        res = await connection.execute(query, values);
+        const user = res[0][0];
+
+        // Throw error if username invalid
+        if(!user) {
+            throw Error("No such username.");
+        }
+
+        // Find what type of account the user has
+        query = 'SELECT * FROM account a INNER JOIN chargerowner c ON a.id = c.accountId WHERE a.username = ?;'
+        values = [credentials.username];
+        res = await connection.execute(query, values);
+
+        if(res[0][0]) {
+            user["chargerOwner"] = true;
+            user["vehicleOwner"] = false;
+        }
+        // Assume if they aren't charger owner, they are vehicle owner
+        else {
+            user["chargerOwner"] = false;
+            user["vehicleOwner"] = true;
+        }
+
+        if(connection){
+            await connection.end();
+            console.log('Database connection closed.');
+        }
+        return user;
+    }
+    catch (error) {
+        console.error('Error logging in:', error);
+        if(connection){
+            await connection.end();
+            console.log('Database connection closed.');
+        }
+        return {error: error};
+    }
 }
 
 

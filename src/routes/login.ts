@@ -6,12 +6,12 @@ const router: Router = Router();
 
 router.post('/', async (req: Request, res: Response) => {
     const credentials: UserLogin = req.body;
-    const successfulLogin = await login(credentials);
-    if(successfulLogin){
-        res.status(201).send({message: 'Successful login.'});
+    const response = await login(credentials);
+    if(!response?.error){
+        res.status(201).send(response);
     }
     else{
-        res.status(400).send({message: 'Invalid credentials.'});
+        res.status(400).send(response);
     }
 });
 
