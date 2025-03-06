@@ -1,4 +1,4 @@
-import { Availability, User, UserLogin } from './types';
+import { Availability, GetAppointmentsData, Reservation, User, UserLogin } from './types';
 import sql, { QueryOptions, QueryResult, ResultSetHeader } from 'mysql2/promise';
 
 const config = {
@@ -180,8 +180,55 @@ export async function addAvailability(availability: Availability) {
     }
 }
 
-export async function addReservation() {
-    // TODO: add a reservation for a charger and user
-    // Params to this function also need to be defined.
-    return null;
+export async function addReservation(reservationData: Reservation) {
+    let connection = null;
+    let res = null;
+    try {
+        connection = await sql.createConnection(config);
+
+        // Insert user into availability table
+        let query = "SELECT vov.vehicleId FROM account a INNER JOIN vehicleowner vo ON a.id = vo.accountId INNER JOIN vehicleowner_vehicle vov ON vo.id = vov.vehicleOwnerId WHERE a.username = ?;";
+        let values = [reservationData.driverUsername];
+        const selectRes: any = await connection.execute(query, values);
+        const vehicleId = selectRes[0][0]?.vehicleId;
+        query = "INSERT INTO reservation (startDateTime, endDateTime, vehicleId, chargerId) VALUES (?, ?, ?, ?);";
+        values = [reservationData.startTime, reservationData.endTime, vehicleId, reservationData.chargerId];
+        const insertRes: any = await connection.execute(query, values);
+    }
+    catch (error) {
+        console.error('Error adding reservation:', error);
+        return {error: error};
+    }
+    finally {
+        if(connection){
+            await connection.end();
+            console.log('Database connection closed.');
+        }
+        return {message: "Successfully added reservation"};
+    }
+}
+
+
+export async function getAppointments(data: GetAppointmentsData) {
+    let connection = null;
+    let res: any = null;
+    try {
+        connection = await sql.createConnection(config);
+
+        let query = 'SELECT r.id, r.startDateTime, r.endDateTime, address.addressLine1, address.addressLine2, address.city, address.state, address.zip FROM account a INNER JOIN vehicleowner vo ON a.id = vo.accountId INNER JOIN vehicleowner_vehicle vov ON vo.id = vov.vehicleOwnerId INNER JOIN reservation r ON vov.vehicleId = r.vehicleId INNER JOIN charger c ON r.chargerId = c.id INNER JOIN address ON address.id = c.addressId WHERE a.username = ?;';
+        let values = [data.username];
+        res = await connection.execute(query, values);
+        console.log(res);
+    }
+    catch (error) {
+        console.error('Error retrieving appointments:', error);
+        return {error: error};
+    }
+    finally {
+        if(connection){
+            await connection.end();
+            console.log('Database connection closed.');
+        }
+        return res[0];
+    }
 }

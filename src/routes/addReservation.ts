@@ -1,12 +1,27 @@
 import { Router, Request, Response } from 'express';
 import { addReservation } from '../db';
-import { UserLogin } from '../types';
+import { Reservation } from '../types';
 
 const router: Router = Router();
 
 router.post('/', async (req: Request, res: Response) => {
-    // TODO: use addReservation function in DB file to add a reservation for a user and charger
-    res.status(201).send({});
+    try {
+            const reservationData: Reservation = req.body;
+            console.log(reservationData);
+            const response = await addReservation(reservationData);
+            if(!response.error){
+                res.status(201).send({id: response})
+            }
+            else{
+                throw response.error;
+            }
+        }
+        catch (error) {
+            console.log(error);
+            res.status(400).send({
+                "message" : "An error occurred adding reservation."
+            });
+        }
 });
 
 export default router;

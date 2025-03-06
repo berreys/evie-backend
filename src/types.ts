@@ -30,3 +30,15 @@ export interface Availability {
     startTime: String; //ISO format
     endTime: String; //ISO format
 }
+
+export interface Reservation {
+    chargerId: Number;
+    startTime: String;
+    endTime: String;
+    driverUsername: String;
+}
+
+export interface GetAppointmentsData {
+    username: String;
+    isChargerOwner: Boolean;
+}
