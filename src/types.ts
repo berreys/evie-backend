@@ -42,3 +42,9 @@ export interface GetAppointmentsData {
     username: String;
     isChargerOwner: Boolean;
 }
+
+export interface ChargerAddLatLong {
+    id: Number;
+    latitude: Number;
+    longitude: Number;
+}

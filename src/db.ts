@@ -1,4 +1,4 @@
-import { Availability, GetAppointmentsData, Reservation, User, UserLogin } from './types';
+import { Availability, GetAppointmentsData, Reservation, User, UserLogin, ChargerAddLatLong } from './types';
 import sql, { QueryOptions, QueryResult, ResultSetHeader } from 'mysql2/promise';
 
 const config = {
@@ -230,5 +230,29 @@ export async function getAppointments(data: GetAppointmentsData) {
             console.log('Database connection closed.');
         }
         return res[0];
+    }
+}
+
+export async function addLatLongToCharger(data: ChargerAddLatLong) {
+    let connection = null;
+    let res: any = null;
+    try {
+        connection = await sql.createConnection(config);
+
+        let query = 'UPDATE charger SET latitude = ?, longitude = ? WHERE id = ?;';
+        let values = [data.latitude, data.longitude, data.id];
+        res = await connection.execute(query, values);
+        console.log(res);
+    }
+    catch (error) {
+        console.error('Error updating charger:', error);
+        return {error: error};
+    }
+    finally {
+        if(connection){
+            await connection.end();
+            console.log('Database connection closed.');
+        }
+        return {message: "Successfully added reservation"};
     }
 }
